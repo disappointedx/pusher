@@ -6,12 +6,12 @@
             <label>Введите название теста</label>
           </div>
           <div class="row my-2">
-            <div class="col">
+            <div class="col ">
               <input type="text" class="form-control text-center" v-model="title">
             </div>
-            <div class="col text-center">
+            <div class="col col-sm-4 text-center">
               <button class="btn btn-primary mx-2" @click="store">Создать</button>
-              <button class = "btn btn-primary btn-test w-25 mx-2">Импортировать тест</button>
+              <button class = "btn btn-primary btn-test w-50 mx-2">Импортировать тест</button>
             </div>
           </div>
         </div>
