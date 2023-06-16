@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Events\TimerUpdated;
-use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,21 +12,27 @@ use Illuminate\Http\Request;
 |
 */
 
+// Маршруты для статических страниц
+
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::resource('/room', App\Http\Controllers\RoomController::class);
-
-Route::get('/rooms', [App\Http\Controllers\RoomController::class, 'all']);
 
 Route::get('/profile', function(){
     return view('profile');
 });
 
+
+
+Route::get('/rooms', [App\Http\Controllers\RoomController::class, 'all']);
+
 Route::post('/open_session', [App\Http\Controllers\SessionController::class, 'openSessionForGuest']);
 
 Route::put('/updatescore/{id}', [App\Http\Controllers\GameController::class, 'updatescore']);
+
+// Ресурсные маршруты
+
+Route::resource('/room', App\Http\Controllers\RoomController::class);
 
 Route::resource('/test', App\Http\Controllers\TestController::class)->middleware('auth');
 
@@ -36,15 +40,12 @@ Route::resource('/question', App\Http\Controllers\QuestionController::class)->mi
 
 Route::resource('/answer', App\Http\Controllers\AnswerController::class)->middleware('auth');
 
+// Импорт gift
 
 Route::post('/parse', [App\Http\Controllers\TestController::class, 'parseQuestion']);
 
 Route::post('/upload', [App\Http\Controllers\TestController::class, 'test']);
 
-
-// Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
-//     return Broadcast::auth($request);
-// });
 
 Auth::routes();
 
