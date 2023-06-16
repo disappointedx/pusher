@@ -24,7 +24,7 @@ export default {
     methods: {
         store() {
             axios
-                .post('http://127.0.0.1:8000/open_session', {
+                .post('http://10.3.3.18/open_session', {
                     _method: 'POST',
                     room_pin: this.room_pin,
                     name: this.name,
@@ -39,7 +39,7 @@ export default {
                 });
         },
         GoToRoom(count) {
-            const address = `http://127.0.0.1:8000/room/${count}`;
+            const address = `http://10.3.3.18/room/${count}`;
             window.location.href = address;
         }
     }

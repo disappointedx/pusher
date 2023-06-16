@@ -76,7 +76,7 @@
           alert('Вы не выбрали тест');
         } else {
           axios
-            .post('http://127.0.0.1:8000/room', {
+            .post('http://10.3.3.18/room', {
               _method: 'POST',
               pin: this.title,
               room_owner: this.user_id,
@@ -95,7 +95,7 @@
         }
       },
       GoToRoute(item) {
-        const address = `http://127.0.0.1:8000/room/${item}`;
+        const address = `http://10.3.3.18/room/${item}`;
         window.open(address);
       },
     },

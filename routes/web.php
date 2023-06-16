@@ -37,8 +37,9 @@ Route::resource('/question', App\Http\Controllers\QuestionController::class)->mi
 Route::resource('/answer', App\Http\Controllers\AnswerController::class)->middleware('auth');
 
 
-Route::get('/parse', [App\Http\Controllers\TestController::class, 'parseQuestion']);
+Route::post('/parse', [App\Http\Controllers\TestController::class, 'parseQuestion']);
 
+Route::post('/upload', [App\Http\Controllers\TestController::class, 'test']);
 
 
 // Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {

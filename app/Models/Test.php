@@ -11,6 +11,5 @@ class Test extends Model
     protected $fillable = [
         'uid',
         'title',
-        'question_quantity'
     ];
 }

@@ -61,7 +61,7 @@
 
             <!-- Эта промежуточные результаты  -->
             <div v-if="room[0].status_game === 2">
-                <div class="users_green">
+                <div class="users_green" v-if="user_id == room[0].room_owner">
                     <div class="row">
                         <div class="col text-center">Пользователь</div>
                         <div class="col text-center">Очки</div>
@@ -78,14 +78,17 @@
                             </div>
                         </div>
                         <div v-else>
-                            hello
+                            <!-- hello -->
                         </div>
                     </div>
                     <div v-else>
                         <div v-if="user_id === room[0].room_owner">
                             <div v-for="user in game_user">
                                 <div class="users">
-                                    <h3>{{ user.name }} {{ user.score }}</h3>
+                                    <div class="row">
+                                        <div class="col text-center">{{ user.name }}</div>
+                                        <div class="col text-center">{{ user.score }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +267,7 @@ export default {
         },
         AddUserCount(session_id) {
             axios
-                .put(`http://127.0.0.1:8000/updatescore/${session_id}`, {
+                .put(`http://10.3.3.18/updatescore/${session_id}`, {
                     score: 1
                 })
                 .then(response => {})
@@ -272,7 +275,7 @@ export default {
         },
         StartGame(count) {
             axios
-                .put(`http://127.0.0.1:8000/room/${count}`, {
+                .put(`http://10.3.3.18/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 1,
@@ -299,7 +302,7 @@ export default {
         },
         StopGame(count) {
             axios
-                .put(`http://127.0.0.1:8000/room/${count}`, {
+                .put(`http://10.3.3.18/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 2
@@ -318,7 +321,7 @@ export default {
         },
         GameContinue(count) {
             axios
-                .put(`http://127.0.0.1:8000/room/${count}`, {
+                .put(`http://10.3.3.18/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 1,
@@ -345,7 +348,7 @@ export default {
         },
         GameEnd(count) {
             axios
-                .put(`http://127.0.0.1:8000/room/${count}`, {
+                .put(`http://10.3.3.18/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 3

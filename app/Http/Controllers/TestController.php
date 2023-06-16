@@ -76,43 +76,105 @@ class TestController extends Controller
         return response()->json(['success' => 'Тест успешно удален'], 200);
     }
 
-    public function import(Request $request)
+    public function parseQuestion(Request $request)
     {
-        // Получите загруженный файл .gift
-        $giftFile = $request->file('gift');
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            // Получите расширение файла
+            $extension = $file->getClientOriginalExtension();
+            // Укажите разрешенные форматы файлов
+            $allowedExtensions = ['gift'];
+            // Проверьте, соответствует ли формат файла разрешенным форматам
+            if (in_array($extension, $allowedExtensions)) {
+                $test = new Test();
+                $test->uid = $request->get('uid');
+                $test->title = $request->get('title');
+                $test->save();
+                $fileContent = file_get_contents($file->getRealPath());
+                $lines = explode("\n", $fileContent);
+                $testData = [
+                    'qwests' => [],
+                    'timers' => [],
+                ];
+            
+                $timer_f = false;
+                $qwest_n = -1;
+                $timer = 0;
+            
+                foreach ($lines as $line) {
+                    // Таймер
+                    if (preg_match("/^\/\/\s*!\s*\d*/", $line)) {
+                        $timer = (int) preg_replace("/\/\/\s*!/", "", $line);
+                        $timer_f = true;
+                    }
+    
+                    // Вопрос
+                    if (preg_match("/^::/", $line)) {
+                        $qwest_n += 1;
+                        $qwest = preg_replace("/::/", "", $line);
+                        $qwest = substr($qwest, 0, strlen($qwest) - 2) . '?';
+                        $testData['qwests'][] = ['qwest' => $qwest];
+                        $testData['qwests'][$qwest_n]['variants'] = [];
+                        if ($timer_f) {
+                            $testData['timers'][] = (int) $timer;
+                            $timer_f = false;
+                        } else {
+                            $testData['timers'][] = 20; //  Если таймера нет, сделать обычным значением 20 секунд
+                        }
+                    }
+            
+                    // Определить варианты ответа
+                    if (preg_match("/~/", $line)) {
+                        $variant = preg_replace("/\s*~/", "", $line);
+                        $testData['qwests'][$qwest_n]['variants'][] = $variant;
+                    }
+            
+                    // Определить правильный ответ
+                    if (preg_match("/=/", $line)) {
+                        $variant = preg_replace("/\s*=/", "", $line);
+                        $testData['qwests'][$qwest_n]['variants'][] = $variant;
+                        $testData['qwests'][$qwest_n]['answer'] = array_search($variant, $testData['qwests'][$qwest_n]['variants']) + 1;
+                    }
+                }
         
-        // Проверьте, что файл успешно загружен
-        if ($giftFile) {
-            $contents = file_get_contents($giftFile->getPathname());
-            return response()->json(['message' => 'File imported successfully.']);
+                foreach ($testData['qwests'] as $index => $qwest) {
+                    $question = new Question();
+                    $question->title = $qwest['qwest'];
+                    $question->timer = $testData['timers'][$index];
+                    $question->test_id = $test->id;
+                    $question->save();
+                    foreach ($qwest['variants'] as $variantIndex => $variant) {
+                        $answer = new Answer();
+                        $answer->title = $variant;
+                        
+                        if ($variantIndex + 1 == $qwest['answer']) {
+                            $answer->status = "true";
+                        } else {
+                            $answer->status = "false";
+                        }
+                        
+                        $answer->question_id = $question->id;
+                        $answer->test_id = $test->id;
+                        $answer->save();
+                    }
+                }
+                return response()->json($test, 200);
+            }
+            
+            return response()->json(['message' => 'Недопустимый формат файла'], 400);
         }
         
-        // Возвращаем ошибку, если файл не был загружен
-        return response()->json(['error' => 'No file uploaded.'], 400);
+        return response()->json(['message' => 'Файл не найден'], 400);
     }
-    public function parseQuestion()
+    
+    public function test(Request $request)
     {
-        $filePath = public_path('dates/quiz.gift');
-        $fileContent = file_get_contents($filePath);
-        $lines = explode("\n", $fileContent);
-        $questions = [];
-        $answers = [];
-        $correctAnswer = '';
-        $timer = null;
+       
 
-        foreach ($lines as $line) {
-            // if (str_starts_with($line, '::')) {
-            //     echo substr($line, 2, -1) . PHP_EOL;
-            //     echo '<br>';
-            // }
-        }
-
-        // return [
-        //     'question' => $questionText,
-        //     'answers' => $answers,
-        //     'correctAnswer' => $correctAnswer,
-        //     'timer' => $timer,
-        // ];
     }
+    // Вызываем функцию и получаем результат
+    
+    // Пример обращения к данным
+
+    
 }
-

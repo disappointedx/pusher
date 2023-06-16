@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->integer('uid');
             $table->string('title');
-            $table->unsignedBigInteger('question_quantity');
             $table->timestamps();
         });
     }
