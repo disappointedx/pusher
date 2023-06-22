@@ -98,7 +98,7 @@ export default {
     },
       store() {
           axios
-              .post('http://10.3.3.18/test', {
+              .post('http://10.2.9.27/test', {
                   _method: 'POST',
                   uid: this.user_id,
                   title: this.title,
@@ -122,7 +122,7 @@ export default {
           const test = this.tests.find(test => test.id === testId);
           if (test) {
               axios
-                  .put(`http://10.3.3.18/test/${testId}`, {
+                  .put(`http://10.2.9.27/test/${testId}`, {
                       _method: 'PUT',
                       uid: this.user_id,
                       title: test.title,
@@ -144,7 +144,7 @@ export default {
           this.editTestId = null;
       },
       delete(count) {
-          axios.delete('http://10.3.3.18/test/' + count)
+          axios.delete('http://10.2.9.27/test/' + count)
               .then(response => {
                   const index = this.tests.findIndex(test => test.id === count);
                   if (index !== -1) {
@@ -158,7 +158,7 @@ export default {
               });
       },
       GoToTest(count) {
-          const address = `http://10.3.3.18/test/${count}`;
+          const address = `http://10.2.9.27/test/${count}`;
           // Изменить текущий URL на указанный маршрут
           window.location.href = address;
       },

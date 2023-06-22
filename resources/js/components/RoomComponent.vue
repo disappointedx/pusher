@@ -20,14 +20,14 @@
 
       <div class="active">
         <h2 class="text-center my-5">Активные комнаты</h2>
-      <div v-if="activeRooms.length === 0" class="text-center">Нет активных комнат</div>
+      <div v-if="this.activeRooms.length === 0" class="text-center">Нет активных комнат</div>
       <div class="row" v-else>
-        <div class="col-md-4" v-for="room in activeRooms" :key="room.id">
+        <div class="col-md-4" v-for="room in this.rooms" :key="room.id">
           <div class="card room_item">
             <div class="card-body">
               <h5 class="card-title">{{ room.pin }}</h5>
               <p class="card-text">
-                {{ room.status_game === 1 ? 'Ожидание игроков' : room.status_game === 2 ? 'Идет игра' : 'Игра в ожидании' }}
+                {{ room.status_game === 1 ? 'Ожидание игроков' : room.status_game === 2 ? 'Идет игра' : room.status_game === 0 ? 'Игра в ожидании пользователей' : 'Игра закончена' }}
               </p>
               <button class="btn btn-primary enter_button" @click="GoToRoute(room.pin)">Войти</button>
             </div>
@@ -56,8 +56,8 @@
     created() {
         const self = this;
         window.Echo.channel('store_room').listen('.store_room', response => {
+            console.log(response);
             self.rooms.unshift(response.room);
-            this.activeRooms();
             self.$forceUpdate();
         });
         window.Echo.channel('update_room').listen('.update_room', response => {
@@ -76,7 +76,7 @@
           alert('Вы не выбрали тест');
         } else {
           axios
-            .post('http://10.3.3.18/room', {
+            .post('http://10.2.9.27/room', {
               _method: 'POST',
               pin: this.title,
               room_owner: this.user_id,
@@ -87,7 +87,12 @@
             .then(response => {
               this.title = '';
               this.rooms.unshift(response.data);
+              console.log(response.data);
+              this.$forceUpdate();
               this.$toast.success('Комната создана');
+              this.$nextTick(() => {
+              this.activeRooms.unshift(response.data);
+              });
             })
             .catch(error => {
                 this.$toast.success('Комната не создана');
@@ -95,7 +100,7 @@
         }
       },
       GoToRoute(item) {
-        const address = `http://10.3.3.18/room/${item}`;
+        const address = `http://10.2.9.27/room/${item}`;
         window.open(address);
       },
     },

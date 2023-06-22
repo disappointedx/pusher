@@ -11,8 +11,9 @@ class GameController extends Controller
 {
     public function updatescore(String $session_id, Request $request)
     {
-
-        $game_user = Game_User::where('session_id', $session_id)->first();
+        
+        $game_user = Game_User::where('session_id', $session_id)
+        ->first();
             if ($game_user) {
                 $game_user->score+=1;
                 $game_user->save();

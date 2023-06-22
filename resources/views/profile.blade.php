@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+{{ $testov_proideno }}
 <div class="container">
     <div class="content">
         <div class="profile my-2" style = "background-color: white;">
@@ -18,7 +19,7 @@
                         <label>Тестов пройдено</label>
                    </div> 
                    <div class="count_completed">
-                        <label>0</label>
+                        <label>{{ $testov_proideno }}</label>
                     </div>
                 </div>
                 <div class="col my-4">
@@ -26,7 +27,7 @@
                         <label>Тестов создано</label>
                     </div>
                     <div class="count_created">
-                        <label>0</label>
+                        <label>{{ $testov_sozdano }}</label>
                     </div>
                 </div>
             </div>
@@ -40,6 +41,20 @@
                     <label>
                         Результаты прошлых тестов
                     </label>
+                    @foreach($rooms as $room)
+                    <div class="row m-2 p-2 orange">
+                        <div class="col fs-3">
+                            Ваша комната
+                        </div>
+                        <div class="col fs-3">
+                            {{ $room->pin }}
+                        </div>
+                        <div class="col">
+                            <a href = "history/{{ $room->pin }}" class = "btn btn-primary">Перейти</a>
+                        </div>
+                    </div>
+                    @endforeach
+                    <br>
                 </div>
             </div>
         </div>
@@ -64,6 +79,9 @@
     .button{
         text-align: center;
     }
-
+    .orange {
+        background-color: #f1d9a1;
+        border: 1px solid black;
+    }
 </style>
 @endsection

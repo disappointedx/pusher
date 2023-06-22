@@ -18,9 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/profile', function(){
-    return view('profile');
-});
+Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile']);
 
 
 
@@ -46,6 +44,9 @@ Route::post('/parse', [App\Http\Controllers\TestController::class, 'parseQuestio
 
 Route::post('/upload', [App\Http\Controllers\TestController::class, 'test']);
 
+Route::get('/room', [App\Http\Controllers\RoomController::class, 'index'])->middleware('auth');
+
+Route::get('/history/{id}', [App\Http\Controllers\HomeController::class, 'roomhistory'])->middleware('auth');
 
 Auth::routes();
 

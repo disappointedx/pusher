@@ -73,7 +73,7 @@ export default {
       };
 
       try {
-        const response = await axios.post('http://10.3.3.18/question', questionData);
+        const response = await axios.post('http://10.2.9.27/question', questionData);
         const questionId = response.data.id; // Получаем идентификатор созданного вопроса
         this.CreateAnswer(questionId); // Передаем идентификатор в метод создания ответов
         this.$toast.success('Вопрос и ответы добавлены');
@@ -93,7 +93,7 @@ export default {
         };
 
         axios
-          .post(`http://10.3.3.18/answer`, answerData)
+          .post(`http://10.2.9.27/answer`, answerData)
           .then((response) => {
             this.$toast.success('Ответ добавлен');
             console.log(response);

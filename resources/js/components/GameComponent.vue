@@ -83,17 +83,14 @@
                     </div>
                     <div v-else>
                         <div v-if="user_id === room[0].room_owner">
-                            <div v-for="user in game_user">
+                            <!-- <div v-for="user in game_user"> -->
                                 <div class="users">
                                     <div class="row">
                                         <div class="col text-center">{{ user.name }}</div>
                                         <div class="col text-center">{{ user.score }}</div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <h1>Игра закончена</h1>
+                            <!-- </div> -->
                         </div>
                     </div>
                 </div>
@@ -128,9 +125,20 @@
                 </div>
             </div>
 
+
+
             <!-- Это игра закончена -->
             <div v-if="room[0].status_game == 3">
-
+                <div v-if="user_id === room[0].room_owner">
+                    <div class="text-center fs-2">Игра закончена</div>
+                </div>
+                <div v-else>
+                    <div class = "text-center fs-2">Спасибо что поучаствовали в игре</div>
+                </div>
+                <div class="text-center m-2 p-2">
+                    <button class = "btn btn-primary fs-2 w-100" @click.prevent = "GoToHome()"> Вернуться на главную страницу </button>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -148,9 +156,6 @@ export default {
             proc: "10%",
             filteredAnswers: [], // Добавил пустой массив для отфильтрованных ответов
             status_answer: 0,
-            fill: {
-                gradient: ["red", "green", "blue"]
-            },
         };
     },
     watch: {
@@ -267,7 +272,7 @@ export default {
         },
         AddUserCount(session_id) {
             axios
-                .put(`http://10.3.3.18/updatescore/${session_id}`, {
+                .put(`http://10.2.9.27/updatescore/${session_id}`, {
                     score: 1
                 })
                 .then(response => {})
@@ -275,7 +280,7 @@ export default {
         },
         StartGame(count) {
             axios
-                .put(`http://10.3.3.18/room/${count}`, {
+                .put(`http://10.2.9.27/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 1,
@@ -302,7 +307,7 @@ export default {
         },
         StopGame(count) {
             axios
-                .put(`http://10.3.3.18/room/${count}`, {
+                .put(`http://10.2.9.27/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 2
@@ -321,7 +326,7 @@ export default {
         },
         GameContinue(count) {
             axios
-                .put(`http://10.3.3.18/room/${count}`, {
+                .put(`http://10.2.9.27/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 1,
@@ -348,7 +353,7 @@ export default {
         },
         GameEnd(count) {
             axios
-                .put(`http://10.3.3.18/room/${count}`, {
+                .put(`http://10.2.9.27/room/${count}`, {
                     pin: this.room[0].pin,
                     room_owner: this.room[0].room_owner,
                     status_game: 3
@@ -385,6 +390,10 @@ export default {
             }
             return '';
         },
+        GoToHome(){
+            const address = `http://10.2.9.27/`;
+            window.location.href = address;
+        }
     }
 };
 </script>

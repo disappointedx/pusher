@@ -30,14 +30,22 @@
 </button>
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <!-- Left Side Of Navbar -->
+    @guest
+    @else    
+<!-- Left Side Of Navbar -->
     <ul class="navbar-nav ms-auto">
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown mx-2">
             <div class="navbar-brand mx-auto">
                 <div class="text-center"><a href="/room" class = "btn fs-5">Игровые Комнаты</a></div>
             </div>
         </li>
+        <li class="nav-item dropdown mx-2">
+            <div class="navbar-brand mx-auto">
+                <div class="text-center"><a href="/test" class = "btn fs-5">Создать тест</a></div>
+            </div>
+        </li>
     </ul>
+    @endguest
     <!-- Right Side Of Navbar -->
     <ul class="navbar-nav ms-auto">
         <!-- Authentication Links -->
@@ -55,7 +63,7 @@
         @endif
         @else
         <li class="nav-item dropdown">
-            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+            <a id="navbarDropdown" class="nav-link dropdown-toggle fs-4" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 {{ Auth::user()->name }}
             </a>
 

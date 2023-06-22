@@ -21,6 +21,7 @@ class RoomController extends Controller
      */
     public function index()
     {
+        $this->middleware('auth'); 
         $user_id = Auth::id();
         $rooms = Room::all();
         $rooms = RoomResource::collection($rooms)->resolve();
@@ -47,6 +48,7 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
+        $this->middleware('auth'); 
         $room = Room::create($request->all());
         broadcast(new StoreRoomEvent($room))->toOthers();
         return RoomResource::make($room)->resolve();
@@ -55,7 +57,7 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id) 
     {
         $room = Room::where('pin', $id)->get();
         $rooms = Room::where('pin', $id)->first();
